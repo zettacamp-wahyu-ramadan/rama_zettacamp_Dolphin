@@ -1,9 +1,9 @@
 // Task 1
 const purchase = ({ title, stock, price, discount, tax, maxDiscount, isReady, amount }) => {
   // If stock book is 0, return error
-  // if (stock <= 0) return 'Book is out of stock';
+  if (stock <= 0) return 'Book is out of stock';
   // Check if amount is more than stock
-  // if (amount > stock) return `The stock of book is ${stock}, please insert amount less than equal to ${stock}`;
+  if (amount > stock) return `The stock of book is ${stock}, please insert amount less than equal to ${stock}`;
   // If book is not ready for sell
   if (!isReady) return 'Book is not ready';
   // Calculate tax
@@ -20,12 +20,10 @@ const purchase = ({ title, stock, price, discount, tax, maxDiscount, isReady, am
   // Total price
   let totalPrice = 0;
   for (let i = 0; i < amount; i++) {
-    stock -= i;
-    if (stock <= 0) break
     totalPrice += priceDiscount;
   }
   // Calculate stock book
-  // stock -= amount;
+  stock -= amount;
 
   const result = {
     title,
