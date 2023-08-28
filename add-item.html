@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="/assets/css/style.css">
+  <title>Add Item</title>
+</head>
+
+<body>
+  <main>
+    <header class="navbar">
+      <ul>
+        <li>
+          <a href="/index.html" class="title">ZettaShop</a>
+        </li>
+        <li>
+          <article>
+            <a href="/shopping-list.html">Shopping List</a>
+            <a href="/about-me.html">About</a>
+            <a href="/contact-me.html">Contact</a>
+          </article>
+        </li>
+      </ul>
+    </header>
+
+    <section style="height: 100vh; padding: 0px 20px;">
+      <h1 style="font-weight: bold; font-size: 50px;">Add Item</h1>
+
+      <article style="display: flex; flex-direction: column; flex: 1;">
+        <form action="" style="display: flex; row-gap: 15px; flex-wrap: wrap; flex-direction: row;">
+          <article style="display: flex; flex-direction: column; flex: 1; row-gap: 20px;">
+            <article style="display: flex; flex-direction: column; row-gap: 5px;">
+              <label for="itemName" style="font-size: larger;">Item Name:</label>
+  
+              <input id="itemName" type="text" style="border: 1px solid gray; height: 30px; border-radius: 3px;"
+                placeholder="Item Name">
+            </article>
+  
+            <article style="display: flex; flex-direction: column; row-gap: 5px;">
+              <label for="itemDescription" style="font-size: larger;">Item Description:</label>
+  
+              <input id="itemDescription" type="text" style="border: 1px solid gray; height: 30px; border-radius: 3px;"
+                placeholder="Item Name">
+            </article>
+  
+            <article style="display: flex; flex-direction: column; row-gap: 5px;">
+              <label for="itemPrice" style="font-size: larger;">Item Price:</label>
+  
+              <input id="itemPrice" type="number" style="border: 1px solid gray; height: 30px; border-radius: 3px;"
+                placeholder="Item Name">
+            </article>
+
+            <article style="display: flex; flex-direction: column; row-gap: 5px;">
+              <label for="itemImage" style="font-size: larger;">Item Image:</label>
+  
+              <input id="itemImage" type="file" style="height: 30px; border-radius: 3px;"
+                placeholder="Item Name">
+            </article>
+
+            <input type="button" style="padding: 5px 15px; width: 100px; text-align: center; margin-top: 15px; align-self: flex-end;" value="Submit" />
+          </article>
+
+          <article style="display: flex; flex-direction: column; flex: 1; align-items: center; justify-content: center;">
+            <img src="/assets/images/BALANCE OF THE BLADEKEEPER.png" style="width: 200px; height: 200px;" alt="">
+
+            <p style="text-align: left;">This the description</p>
+          </article>
+        </form>
+      </article>
+    </section>
+
+    <footer>
+      <p>ZettaShop&copy;Copyright 2023</p>
+    </footer>
+  </main>
+</body>
+
+</html>
