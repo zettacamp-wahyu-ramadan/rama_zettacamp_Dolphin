@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Embedded Style CSS</title>
+  <style>
+    main {
+      display: flex;
+      flex-direction: column;
+      row-gap: 20px;
+    }
+
+    table {
+      border: 1px solid #000000;
+      width: 500px;
+    }
+
+    th,
+    td {
+      border: 1px solid #000000;
+      padding: 5px 0px 5px 0px;
+    }
+
+    th:nth-child(1) {
+      width: 50px;
+    }
+
+    td:nth-child(2) {
+      padding: 0px 0px 0px 10px;
+    }
+
+    .number {
+      text-align: center;
+    }
+
+    .tableHobby tr:nth-child(2) {
+      background-color: green;
+    }
+
+    .tableMovie tr:nth-child(3) {
+      background-color: red;
+    }
+
+    .tableSong tr:nth-child(4) {
+      background-color: blue;
+    }
+  </style>
+</head>
+
+<body>
+  <main>
+    <!-- Hobby -->
+    <section>
+      <h2><em>Hobby</em></h2>
+
+      <table class="tableHobby" cellspacing="0">
+        <tr>
+          <th>No.</th>
+          <th>Hobby</th>
+        </tr>
+
+        <tr>
+          <td class="number">1</td>
+          <td class="hobbyname">Hiking</td>
+        </tr>
+
+        <tr>
+          <td class="number">2</td>
+          <td class="hobbyname">Football</td>
+        </tr>
+
+        <tr>
+          <td class="number">3</td>
+          <td class="hobbyname">Playing Game</td>
+        </tr>
+
+        <tr>
+          <td class="number">4</td>
+          <td class="hobbyname">Coding</td>
+        </tr>
+      </table>
+    </section>
+
+    <!-- Favorites Movies -->
+    <section>
+      <h2><em>Movie</em></h2>
+
+      <table class="tableMovie" cellspacing="0">
+        <tr>
+          <th>No.</th>
+          <th>Movie</th>
+        </tr>
+
+        <tr>
+          <td class="number">1</td>
+          <td class="movieName">Twilight Saga: Breaking Down</td>
+        </tr>
+
+        <tr>
+          <td class="number">2</td>
+          <td class="movieName">Fast and Furious</td>
+        </tr>
+
+        <tr>
+          <td class="number">3</td>
+          <td class="movieName">The Avengers</td>
+        </tr>
+
+        <tr>
+          <td class="number">4</td>
+          <td class="movieName">Conjuring</td>
+        </tr>
+      </table>
+    </section>
+
+    <!-- Favorites Songs -->
+    <section>
+      <h2><em>Song</em></h2>
+
+      <table class="tableSong" cellspacing="0">
+        <tr>
+          <th>No.</th>
+          <th>Song</th>
+        </tr>
+
+        <tr>
+          <td class="number">1</td>
+          <td class="songName">Nightmare</td>
+        </tr>
+
+        <tr>
+          <td class="number">2</td>
+          <td class="songName">A Little Piece of Heaven</td>
+        </tr>
+
+        <tr>
+          <td class="number">3</td>
+          <td class="songName">Battle Scars</td>
+        </tr>
+
+        <tr>
+          <td class="number">4</td>
+          <td class="songName">Kimcil Kepolen</td>
+        </tr>
+      </table>
+    </section>
+  </main>
+</body>
+
+</html>
