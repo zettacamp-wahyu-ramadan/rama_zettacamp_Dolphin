@@ -17,21 +17,32 @@ function containDuplicate(nums) {
   // Your logic here
   let result = false;
 
-  // Loop 1 for where index to check
-  for (let i = 0; i < nums.length; i++) {
-    // Looping 2 for check value by index I with another value in another index
-    for (let j = 0; j < nums.length; j++) {
-      // Check value in another index by own
-      if (i !== j) {
-        // console.log(`var I ${i} : var J ${j}`);
-        // Check if value index I have same value in another index then set result to true and break looping
-        if (nums[i] === nums[j]) {
-          result = true;
-          break;
+  // // Loop 1 for where index to check
+  // for (let i = 0; i < nums.length; i++) {
+  //   // Looping 2 for check value by index I with another value in another index
+  //   for (let j = 0; j < nums.length; j++) {
+  //     // Check value in another index by own
+  //     if (i !== j) {
+  //       // console.log(`var I ${i} : var J ${j}`);
+  //       // Check if value index I have same value in another index then set result to true and break looping
+  //       if (nums[i] === nums[j]) {
+  //         result = true;
+  //         break;
+  //       }
+  //     }
+  //   }
+  // }
+
+  const mapNums = nums.map((valueMap, indexMap, arrayMap) => {
+    const filterNums = nums.filter((valueFilter, indexFilter, arrayFilter) => {
+      if (indexMap !== indexFilter) {
+        // console.log(`map index ${indexMap} = ${valueMap} : filter index ${indexFilter} = ${valueFilter}`)
+        if (valueMap === valueFilter) {
+          return result = true;
         }
       }
-    }
-  }
+    })
+  })
 
   return result;
 }
