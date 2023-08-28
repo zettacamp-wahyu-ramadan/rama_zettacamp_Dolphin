@@ -25,8 +25,6 @@ const purchase = ({ title, stock, price, discount, tax, maxDiscount, isReady, am
   }
   // Calculate stock book
   stock -= amount;
-  // Initial start expired date and month
-  // const expiredDate = moment().add(1, 'month').set('date', 5).format('YYYY-MM-DD');
   // Array holder the expired date and month
   const listExpiredDate = [];
   // Calculate credit
@@ -34,6 +32,8 @@ const purchase = ({ title, stock, price, discount, tax, maxDiscount, isReady, am
     const expired = moment().add(i, 'month').set('date', 5).format('YYYY-MM-DD');
     listExpiredDate.push(expired);
   }
+  // Price per mounth (credit)
+  const pricePerMonth = Math.round(totalPrice / creditTerm);
 
   const result = {
     title,
@@ -48,6 +48,7 @@ const purchase = ({ title, stock, price, discount, tax, maxDiscount, isReady, am
     isReady: stock >= 1 ? true : false,
     durationOfCredit: creditTerm,
     listExpiredDate,
+    pricePerMonth,
   };
 
   return result;
