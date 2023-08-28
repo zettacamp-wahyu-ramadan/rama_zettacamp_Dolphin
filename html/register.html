@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Register</title>
+</head>
+
+<body>
+  <main>
+    <section style="display: flex; flex-direction: column; align-items: center; justify-content: center;">
+      <h2>Register</h2>
+
+      <form action="profile.html"
+        style="display: flex; flex-direction: column; padding: 20px 20px 20px 5px; border: 1px solid #000000; border-radius: 10px; width: 25%; row-gap: 10px;">
+        <article style="display: flex; flex-direction: column; row-gap: 5px;">
+          <label for="email" style="font-weight: 700; font-size: medium;">Email:</label>
+          <input id="email" name="email" type="email"
+            style="border: 1px solid #000000; height: 30px; border-radius: 10px; padding: 0px 0px 0px 5px;"
+            placeholder="Email" required />
+        </article>
+
+        <article style="display: flex; flex-direction: column; row-gap: 5px;">
+          <label for="email" style="font-weight: 700; font-size: medium;">Password:</label>
+          <input id="password" name="password" type="password"
+            style="border: 1px solid #000000; height: 30px; border-radius: 10px; padding: 0px 0px 0px 5px;"
+            placeholder="Password" required />
+        </article>
+
+        <article style="display: flex; flex-direction: column; row-gap: 5px;">
+          <label for="name" style="font-weight: 700; font-size: medium;">Name:</label>
+          <input id="name" name="name" type="text"
+            style="border: 1px solid #000000; height: 30px; border-radius: 10px; padding: 0px 0px 0px 5px;"
+            placeholder="Name" required />
+        </article>
+
+        <article style="display: flex; flex-direction: column; row-gap: 5px;">
+          <label for="phone" style="font-weight: 700; font-size: medium;">Phone number:</label>
+          <input id="phone" name="phone" type="tel" pattern="[0-9]{3}[0-9]{3}[0-9]{3}[0-9]{3}"
+            placeholder="Phone number 081234567890"
+            style="border: 1px solid #000000; height: 30px; border-radius: 10px; padding: 0px 0px 0px 5px;" required />
+        </article>
+
+        <article style="display: flex; flex-direction: column; row-gap: 8px;">
+          <label for="type" style="font-weight: 700; font-size: medium;">Type of account:</label>
+
+          <article style="display: flex; flex-direction: row; column-gap: 5px;">
+            <article
+              style="display: flex; flex-direction: row; column-gap: 2px; align-items: center; padding-top: 5px; padding-bottom: 5px;">
+              <input id="type" name="typeaccount" type="radio" value="free" checked />
+              <span>Free</span>
+            </article>
+
+            <article
+              style="display: flex; flex-direction: row; column-gap: 2px; align-items: center; padding-top: 5px; padding-bottom: 5px;">
+              <input id="type" name="typeaccount" type="radio" value="personal" />
+              <span>Personal</span>
+            </article>
+          </article>
+        </article>
+
+        <input type="submit" value="Register"
+          style="display: flex; flex: 1; align-items: center; justify-content: center; padding-top: 10px; padding-bottom: 10px; border-radius: 10px; border: none; text-decoration: none; border: none; cursor: pointer;" />
+      </form>
+    </section>
+  </main>
+</body>
+
+</html>

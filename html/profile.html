@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Profile</title>
+</head>
+
+<body>
+  <main>
+    <!-- Navbar -->
+    <section>
+      <ul
+        style="display: flex; flex-direction: row; column-gap: 10px; list-style: none; padding: 10px 10px 10px 0px; border-bottom: 1px solid #000000;">
+        <li style="display: flex; flex-direction: row; flex: 1; justify-content: space-between;">
+          <span style="font-size: x-large; font-weight: 700;"><em>Profit.co</em></span>
+
+          <article style="display: flex; flex-direction: row; column-gap: 10px;">
+            <a href="profile.html"
+              style="color: #000000; font-size: medium; align-items: center; text-decoration: none;">Profile</a>
+
+            <a href="song_listing.html"
+              style="color: #000000; font-size: medium; align-items: center; text-decoration: none;">Song List</a>
+
+            <a href="album_preview.html"
+              style="color: #000000; font-size: medium; align-items: center; text-decoration: none;">Album Preview</a>
+          </article>
+        </li>
+      </ul>
+    </section>
+
+    <!-- Content -->
+    <section>
+      <!-- Profile -->
+      <article>
+        <p style="font-weight: 700; font-size: x-large;">
+          <em>Profile</em>
+        </p>
+
+        <img src="../assets/img/selfie.jpeg" width="125" height="125"
+          style="border-radius: 10px; margin-bottom: 10px;" />
+      </article>
+
+      <article style="display: flex; flex-direction: column; row-gap: 10px; column-gap: 5px;">
+        <article style="display: flex; flex-direction: row; column-gap: 10px; row-gap: 5px;">
+          <article
+            style="display: flex; flex-direction: column; flex-wrap: wrap; width: fit-content; row-gap: 5px; column-gap: 10px;">
+            <label for="firstName" style="font-weight: 700; font-size: medium;">First Name:</label>
+
+            <input id="firstName" name="firstName" value="Wahyu" style="height: 20px; border-radius: 5px;" disabled />
+          </article>
+
+          <article
+            style="display: flex; flex-direction: column; flex-wrap: wrap; width: fit-content; row-gap: 5px; column-gap: 10px;">
+            <label for="lastName" style="font-weight: 700; font-size: medium;">Last Name:</label>
+
+            <input id="lastName" name="lastName" value="Ramadan" style="height: 20px; border-radius: 5px;" disabled />
+          </article>
+        </article>
+
+        <article style="display: flex; flex-direction: column; row-gap: 5px;">
+          <label for="email" style="font-weight: 700; font-size: medium;">Email:</label>
+
+          <input id="email" name="email" value="wramadan1203@gmail.com"
+            style="height: 20px; width: fit-content; border-radius: 5px;" disabled />
+        </article>
+
+        <article style="display: flex; flex-direction: column; row-gap: 5px;">
+          <label for="nickname" style="font-weight: 700; font-size: medium;">Nickname:</label>
+
+          <input id="nickname" name="nickname" value="Rama"
+            style="height: 20px; width: fit-content; border-radius: 5px;" disabled />
+        </article>
+
+        <article style="display: flex; flex-direction: column; row-gap: 5px;">
+          <label for="bio" style="font-weight: 700; font-size: medium;">Bio:</label>
+
+          <textarea id="bio" name="bio" style="min-height: 100px; width: 355px;" disabled>&nbsp;I&acute;am a hardworking, ambitious and energetic person in terms of programming, with 1 year working experience and entered the world of programming from a vocational high school, and had attended bootcamp training at arkademy as a Fullstack Mobile Developer
+          </textarea>
+        </article>
+      </article>
+    </section>
+  </main>
+</body>
+
+</html>
