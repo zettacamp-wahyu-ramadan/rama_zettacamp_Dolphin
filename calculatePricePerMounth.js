@@ -29,13 +29,17 @@ const purchase = ({ title, stock, price, discount, tax, maxDiscount, isReady, am
   const listExpiredDate = [];
   // Price per mounth (credit)
   const pricePerMonth = Math.round(totalPrice / creditTerm);
+  // Look for a price shortfall
+  const priceShortfall = totalPrice - (pricePerMonth * creditTerm);
+  // CalculatePriceShortfallHolder
+  const creditPrice = priceShortfall >= 0 ? pricePerMonth + priceShortfall : pricePerMonth - Math.abs(priceShortfall);
   // Calculate credit
   for (let indexMonth = 1; indexMonth <= creditTerm; indexMonth++) {
     const expired = moment().add(indexMonth, 'month').set('date', 5).format('YYYY-MM-DD');
     // Set the data in object
     const data = {
       expired,
-      payment: pricePerMonth,
+      payment: indexMonth === 1 ? creditPrice : pricePerMonth,
     };
     // Push in array
     listExpiredDate.push(data);
@@ -45,7 +49,6 @@ const purchase = ({ title, stock, price, discount, tax, maxDiscount, isReady, am
     title,
     price,
     stock: stock >= 1 ? stock : 0,
-    // amount,
     amountOfTax: calculateTax,
     priceAfterTax: priceTax,
     amountOfDiscount: resultDiscount,
@@ -54,7 +57,6 @@ const purchase = ({ title, stock, price, discount, tax, maxDiscount, isReady, am
     isReady: stock >= 1 ? true : false,
     durationOfCredit: creditTerm,
     listExpiredDate,
-    pricePerMonth,
   };
 
   return result;
@@ -69,7 +71,7 @@ const book = {
   tax: 10,
   maxDiscount: 100000,
   isReady: true,
-  creditTerm: 3,
+  creditTerm: 7,
 };
 
 console.log(purchase(book));
