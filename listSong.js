@@ -295,28 +295,47 @@ const listSong = [
 
 // Grouping songs by artist
 const groupByArtist = (artistParam) => {
-  // Set param to lower case
-  artistParam.toLowerCase();
-  // Find list song by artist
-  // Set artist from callback filtering to lowercase and find if it contain with artist from param
-  const filteringByArtist = listSong.filter((valueSong) =>
-    valueSong.artist.toLowerCase().includes(artistParam)
-  );
+  const uniqueArtist = listSong
+    .map((valueMap) => valueMap.genre)
+    .filter(
+      (valueFilter, indexFilter, arrayFilter) =>
+        arrayFilter.indexOf(valueFilter) === indexFilter
+    );
+  // Find list song by genre
+  const mapingArtist = uniqueArtist.map((valueArtist, indexArtist) => {
+    const groupingArtist = listSong.filter(
+      (valueSong) => valueSong.artist === valueArtist
+    );
+    return {
+      artist: valueArtist,
+      songs: JSON.stringify(groupingArtist),
+    };
+  });
 
-  return filteringByArtist;
+  return mapingArtist;
 };
 
 // Grouping songs by genre
 const groupByGenre = (genreParam) => {
-  // Set param to lowercase
-  genreParam.toLowerCase();
+  // Get unique genre
+  const uniqueGenre = listSong
+    .map((valueMap) => valueMap.genre)
+    .filter(
+      (valueFilter, indexFilter, arrayFilter) =>
+        arrayFilter.indexOf(valueFilter) === indexFilter
+    );
   // Find list song by genre
-  // Set genre from callback filtering to lowecase and find if it contain with genre from param
-  const filteringByGenre = listSong.filter((valueSong) =>
-    valueSong.genre.toLowerCase().includes(genreParam)
-  );
+  const mapingGenre = uniqueGenre.map((valueGenre, indexGenre) => {
+    const groupingGenre = listSong.filter(
+      (valueSong) => valueSong.genre === valueGenre
+    );
+    return {
+      genre: valueGenre,
+      songs: JSON.stringify(groupingGenre),
+    };
+  });
 
-  return filteringByGenre;
+  return mapingGenre;
 };
 
 // Calculate duration max 1 hour
@@ -360,28 +379,44 @@ const groupByGenre = (genreParam) => {
 const groupSongByMaxDuration1Hour = (songsParam) => {
   let initialDurationSecond = 0;
   const maxLength = 60 * 60;
-  // Get the duration all list song
-  const filterSong = songsParam.filter((valueDuration, index) => {
-    const duration = valueDuration.duration;
-    const minuteOfSong = parseInt(duration.split('.')[0]);
-    const secondOfSong = parseInt(duration.split('.')[1]);
-    const convertMinutesToSecond = minuteOfSong * 60;
-    const totalDurationSecondPerSong = convertMinutesToSecond + secondOfSong;
-    initialDurationSecond += totalDurationSecondPerSong;
-
-    if (initialDurationSecond <= maxLength) return valueDuration;
-
-    return false;
+  let randomKeyId = [];
+  songsParam.forEach((valueForEach) => {
+    const random = songsParam[Math.floor(Math.random() * songsParam.length)];
+    valueForEach.id.toString().includes(random.id)
+      ? randomKeyId.push(false)
+      : randomKeyId.push(random);
+    // randomKeyId.push(random);
   });
-  return filterSong;
+
+  randomKeyId.filter((valueFilter) => valueFilter);
+  console.log(randomKeyId);
+
+  // console.log(randomKeyId);
+  // Get the duration all list song
+  // const filterSong = songsParam.filter((valueDuration, index) => {
+  //   const duration = valueDuration.duration;
+  //   const minuteOfSong = parseInt(duration.split('.')[0]);
+  //   const secondOfSong = parseInt(duration.split('.')[1]);
+  //   const convertMinutesToSecond = minuteOfSong * 60;
+  //   const totalDurationSecondPerSong = convertMinutesToSecond + secondOfSong;
+  //   initialDurationSecond += totalDurationSecondPerSong;
+
+  //   if (initialDurationSecond <= maxLength) return valueDuration;
+
+  //   return false;
+  // });
+  // return filterSong;
 };
 
-console.log('Search by artist name', groupByArtist('el'));
-console.log('');
-console.log('------------------------------------------');
-console.log('');
-console.log('Search by genre', groupByGenre('roc'));
-console.log('');
-console.log('------------------------------------------');
-console.log('');
-console.log('List song with max 1 hour is', groupSongByMaxDuration1Hour(listSong));
+// console.log('Search by artist name', groupByArtist('adele'));
+// console.log('');
+// console.log('------------------------------------------');
+// console.log('');
+console.log('Search by genre', groupByGenre());
+// console.log('');
+// console.log('------------------------------------------');
+// console.log('');
+// console.log(
+//   'List song with max 1 hour is',
+//   groupSongByMaxDuration1Hour(listSong)
+// );
