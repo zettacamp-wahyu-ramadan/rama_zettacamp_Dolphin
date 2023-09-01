@@ -462,14 +462,14 @@ const groupSongByMaxDuration1Hour = (songsParam) => {
   return filterSong;
 };
 
-// console.log('Search by artist name', groupByArtist());
-// console.log('');
-// console.log('------------------------------------------');
-// console.log('');
-// console.log('Search by genre', groupByGenre());
-// console.log('');
-// console.log('------------------------------------------');
-// console.log('');
+console.log('Search by artist name', groupByArtist());
+console.log('');
+console.log('------------------------------------------');
+console.log('');
+console.log('Search by genre', groupByGenre());
+console.log('');
+console.log('------------------------------------------');
+console.log('');
 console.log(
   'List song with max 1 hour is',
   groupSongByMaxDuration1Hour(listSong)
