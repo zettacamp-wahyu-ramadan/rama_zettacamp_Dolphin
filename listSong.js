@@ -294,9 +294,9 @@ const listSong = [
 // ];
 
 // Grouping songs by artist
-const groupByArtist = (artistParam) => {
+const groupByArtist = () => {
   const uniqueArtist = listSong
-    .map((valueMap) => valueMap.genre)
+    .map((valueMap) => valueMap.artist)
     .filter(
       (valueFilter, indexFilter, arrayFilter) =>
         arrayFilter.indexOf(valueFilter) === indexFilter
@@ -308,7 +308,7 @@ const groupByArtist = (artistParam) => {
     );
     return {
       artist: valueArtist,
-      songs: JSON.stringify(groupingArtist),
+      songs: JSON.stringify(groupingArtist, null, 2),
     };
   });
 
@@ -316,7 +316,7 @@ const groupByArtist = (artistParam) => {
 };
 
 // Grouping songs by genre
-const groupByGenre = (genreParam) => {
+const groupByGenre = () => {
   // Get unique genre
   const uniqueGenre = listSong
     .map((valueMap) => valueMap.genre)
@@ -331,7 +331,7 @@ const groupByGenre = (genreParam) => {
     );
     return {
       genre: valueGenre,
-      songs: JSON.stringify(groupingGenre),
+      songs: JSON.stringify(groupingGenre, null, 2),
     };
   });
 
@@ -379,44 +379,98 @@ const groupByGenre = (genreParam) => {
 const groupSongByMaxDuration1Hour = (songsParam) => {
   let initialDurationSecond = 0;
   const maxLength = 60 * 60;
+  let finalDuration = 0;
   let randomKeyId = [];
-  songsParam.forEach((valueForEach) => {
+  // songsParam.forEach((valueForEach, index) => {
+  //   const random = songsParam[Math.floor(Math.random() * index)];
+  //   console.log('random', random)
+  //   // valueForEach.id.toString().includes(random.id)
+  //   //   ? randomKeyId.push(false)
+  //   //   : randomKeyId.push(random);
+  // });
+  // console.log('random', songsParam[Math.floor(Math.random() * songsParam.length)])
+
+  // Looping for initial random key
+  songsParam.forEach((valueSong) => {
+    // Set random data by id
     const random = songsParam[Math.floor(Math.random() * songsParam.length)];
-    valueForEach.id.toString().includes(random.id)
-      ? randomKeyId.push(false)
-      : randomKeyId.push(random);
-    // randomKeyId.push(random);
+    // If have't data in array randomKeyId, then push it for initialization
+    if (!randomKeyId.length) {
+      randomKeyId.push(random);
+    } else {
+      // Check is array from variable randomKeyId already have same data
+      const containObject = randomKeyId.some((valueSome) => {
+        return valueSome.id === random.id;
+      });
+
+      // If contain same data, push it to false, if not push the data
+      if (containObject) {
+        randomKeyId.push(false);
+      } else {
+        randomKeyId.push(random);
+      }
+    }
   });
 
-  randomKeyId.filter((valueFilter) => valueFilter);
-  console.log(randomKeyId);
+  // Find filter when the value in random key is not false
+  const filteringTheRandomId = randomKeyId.filter((valueFilter) => valueFilter);
 
-  // console.log(randomKeyId);
+  // Looping for remaining data
+  songsParam.forEach((valueAnotherSong) => {
+    // Check the duplicate data from randomKeyId with original array
+    const isDuplicate = randomKeyId.some((valueSome) => {
+      return valueSome.id === valueAnotherSong.id;
+    });
+
+    // If not duplicate, push the data, if duplicate push false
+    if (!isDuplicate) {
+      randomKeyId.push(valueAnotherSong);
+    } else {
+      randomKeyId.push(false);
+    }
+  });
+
+  // Filtering value in randomKeyId where is not false
+  const finalResultArray = randomKeyId.filter((valueFilter) => valueFilter);
+
   // Get the duration all list song
-  // const filterSong = songsParam.filter((valueDuration, index) => {
-  //   const duration = valueDuration.duration;
-  //   const minuteOfSong = parseInt(duration.split('.')[0]);
-  //   const secondOfSong = parseInt(duration.split('.')[1]);
-  //   const convertMinutesToSecond = minuteOfSong * 60;
-  //   const totalDurationSecondPerSong = convertMinutesToSecond + secondOfSong;
-  //   initialDurationSecond += totalDurationSecondPerSong;
+  const filterSong = finalResultArray.filter((valueDuration, index) => {
+    // Set data duration from looping in variable duration
+    const duration = valueDuration.duration;
+    // Get the minute
+    const minuteOfSong = parseInt(duration.split('.')[0]);
+    // Get the second
+    const secondOfSong = parseInt(duration.split('.')[1]);
+    // Convert the minute to second
+    const convertMinutesToSecond = minuteOfSong * 60;
+    // Calculate duration with unit of seconds
+    const totalDurationSecondPerSong = convertMinutesToSecond + secondOfSong;
+    // Set the initial variable for duration to result from calculate second
+    initialDurationSecond += totalDurationSecondPerSong;
 
-  //   if (initialDurationSecond <= maxLength) return valueDuration;
+    // If duration less or equal than 1 hour, return the value, otherwise return false
+    if (initialDurationSecond <= maxLength) {
+      finalDuration = initialDurationSecond;
+      return valueDuration;
+    }
 
-  //   return false;
-  // });
-  // return filterSong;
+    return false;
+  });
+
+  // Add the total duration from that calculating
+  filterSong.push({ totalDuration: finalDuration, max: maxLength });
+  return filterSong;
 };
 
-// console.log('Search by artist name', groupByArtist('adele'));
+// console.log('Search by artist name', groupByArtist());
 // console.log('');
 // console.log('------------------------------------------');
 // console.log('');
-console.log('Search by genre', groupByGenre());
+// console.log('Search by genre', groupByGenre());
 // console.log('');
 // console.log('------------------------------------------');
 // console.log('');
-// console.log(
-//   'List song with max 1 hour is',
-//   groupSongByMaxDuration1Hour(listSong)
-// );
+console.log(
+  'List song with max 1 hour is',
+  groupSongByMaxDuration1Hour(listSong)
+);
