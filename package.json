@@ -1,0 +1,24 @@
+{
+  "name": "debugging",
+  "version": "1.0.0",
+  "description": "",
+  "main": "calculatePricePerMounth.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "calculate": "node calculatePricePerMounth.js",
+    "majority": "node majorityElement_rama.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/zettacamp-wahyu-ramadan/rama_zettacamp_Dolphin.git"
+  },
+  "author": "Wahyu Ramadan",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/zettacamp-wahyu-ramadan/rama_zettacamp_Dolphin/issues"
+  },
+  "homepage": "https://github.com/zettacamp-wahyu-ramadan/rama_zettacamp_Dolphin#readme",
+  "dependencies": {
+    "moment": "^2.29.4"
+  }
+}
