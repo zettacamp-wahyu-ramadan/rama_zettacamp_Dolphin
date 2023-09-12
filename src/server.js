@@ -17,7 +17,7 @@ app.use(
   })
 );
 // Use morgan to console api hitting
-app.use(morgan('dev'));
+// app.use(morgan('dev'));
 // Wrapped response
 app.response.sendWrapped = function (message, statusCode, data) {
   return this.status(statusCode).json({
