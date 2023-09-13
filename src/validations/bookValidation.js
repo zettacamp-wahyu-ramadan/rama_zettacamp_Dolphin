@@ -69,6 +69,12 @@ const purchaseBookValidation = Joi.object({
     .error((errors) => {
       return errors;
     }),
+
+  findByDate: Joi.string()
+    .optional()
+    .error((errors) => {
+      return errors;
+    }),
 });
 
 module.exports = {

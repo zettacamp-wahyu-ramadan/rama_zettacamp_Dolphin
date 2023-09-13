@@ -15,6 +15,7 @@ const getBookController = async (req, res) => {
       amount,
       creditTerm,
       additionalPrice,
+      findByDate,
     } = req.body;
 
     // If stock book is 0, return error
@@ -67,8 +68,40 @@ const getBookController = async (req, res) => {
       creditTerm,
       creditPrice,
       pricePerMonth,
-      additionalPrice,
+      additionalPrice
     );
+
+    // Get the value of array payment
+    const getTheArrayPayment = resultTermOfCredit.map((item) => item.payment);
+    // Set to distinct of array payment
+    const setList = new Set(getTheArrayPayment);
+    const distinctListTermAmount = Array.from(setList);
+    console.log('SET', setList);
+
+    // Initialization new Map
+    const paidMap = new Map();
+    // Looping the array of object resultTermOfCredit and set the key in date
+    resultTermOfCredit.forEach((item) => {
+      paidMap.set(item.expired, item);
+    });
+    // Initialization array holder for result list all of term
+    const resultListOfAllTerm = [];
+    paidMap.forEach((value, key, map) => {
+      // console.log(`${key}: ${value} : ${map}`)
+      // Set the key from MAP and value from the MAP inside one varaiable (data) and push in array holder
+      const data = {
+        [key]: value,
+      };
+      resultListOfAllTerm.push(data);
+    });
+    console.log('MAP', paidMap);
+    // Initialization for find value by key (date)
+    let resultFindByDate = '';
+    // Get value from map by key body request
+    if (findByDate) {
+      // console.log(paidMap.get(findByDate));
+      resultFindByDate = paidMap.get(findByDate);
+    }
 
     const result = {
       title,
@@ -82,6 +115,9 @@ const getBookController = async (req, res) => {
       isReady: stock >= 1 ? true : false,
       durationOfCredit: creditTerm,
       listExpiredDate: resultTermOfCredit,
+      distinctListTermAmount,
+      resultListOfAllTerm,
+      termToBePaid: resultFindByDate,
     };
 
     res.sendWrapped('Success', httpStatus.OK, result);
