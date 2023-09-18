@@ -1,0 +1,137 @@
+const httpStatus = require('http-status');
+const moment = require('moment');
+const {
+  createBookService,
+  findAllBookService,
+  findByIdBookService,
+  updateOneBookByQueryService,
+  deleteOneBookByQueryService,
+} = require('../../services/books/bookService');
+
+const createBookController = async (req, res) => {
+  try {
+    const requestBody = req.body;
+    // Set title to uppercase
+    const refactorTitle = requestBody.title.toUpperCase();
+    // Refactor title in request body to send in service create book
+    const data = {
+      ...requestBody,
+      title: refactorTitle,
+    };
+    // Call service to create book
+    const book = await createBookService(data);
+    // Conditional if service book not return data
+    if (!book)
+      return res.sendWrapped('Fail to create book', httpStatus.CONFLICT);
+
+    res.sendWrapped('Create book successfully', httpStatus.CREATED, book);
+  } catch (error) {
+    console.error(`Error catch controller: ${error}`);
+    throw new Error(error);
+  }
+};
+
+const findAllBookController = async (req, res) => {
+  try {
+    const books = await findAllBookService();
+
+    res.sendWrapped('List of books', httpStatus.OK, books);
+  } catch (error) {
+    console.error(`Error catch controller: ${error}`);
+    throw new Error(error);
+  }
+};
+
+const findByIdBookController = async (req, res) => {
+  try {
+    const { id } = req.params;
+
+    const book = await findByIdBookService(id);
+
+    if (!book)
+      return res.sendWrapped(
+        `Book with ID ${id} not found`,
+        httpStatus.NOT_FOUND
+      );
+
+    res.sendWrapped(`Book with ID ${id}`, httpStatus.OK, book);
+  } catch (error) {
+    console.error(`Error catch controller: ${error}`);
+    throw new Error(error);
+  }
+};
+
+const updateByIdBookController = async (req, res) => {
+  try {
+    const { id } = req.params;
+    let requestBody = req.body;
+
+    if (requestBody.title) {
+      requestBody.title = requestBody.title.toUpperCase();
+    }
+
+    const book = await findByIdBookService(id);
+
+    if (!book)
+      return res.sendWrapped(
+        `Book with ID ${id} not found`,
+        httpStatus.NOT_FOUND
+      );
+
+    const update = await updateOneBookByQueryService({ _id: id }, requestBody);
+
+    if (update.nModified <= 0)
+      return res.sendWrapped(
+        `Fail to update book with ID ${id}`,
+        httpStatus.CONFLICT
+      );
+
+    res.sendWrapped(
+      `Update book with ID ${id} successfully`,
+      httpStatus.OK,
+      update
+    );
+  } catch (error) {
+    console.error(`Error catch controller: ${error}`);
+    throw new Error(error);
+  }
+};
+
+const deleteByIdBookController = async (req, res) => {
+  try {
+    const { id } = req.params;
+
+    const book = await findByIdBookService(id);
+
+    if (!book)
+      return res.sendWrapped(
+        `Fail to delete book with ID ${id}`,
+        httpStatus.CONFLICT
+      );
+
+    const deleting = await deleteOneBookByQueryService({ _id: id });
+
+    if (deleting.deletedCount <= 0)
+      return res.sendWrapped(
+        `Fail to delete book with ID ${id}`,
+        httpStatus.CONFLICT
+      );
+
+    res.sendWrapped(
+      `Book with ID ${id} has been deleted`,
+      httpStatus.OK,
+      deleting
+    );
+  } catch (error) {
+    console.error(`Error catch controller: ${error}`);
+    throw new Error(error);
+  }
+};
+
+module.exports = {
+  createBookController,
+  findAllBookController,
+  findByIdBookController,
+  updateByIdBookController,
+  deleteByIdBookController,
+};
