@@ -2,6 +2,7 @@ const { Router } = require('express');
 const bookRoute = require('./books/bookRoute');
 const userRoute = require('./users/userRoute');
 const transactionRoute = require('./transactions/transactionRoute');
+const bookshelvesRoute = require('./bookshelves/bookshelvesRoute');
 
 const router = Router();
 
@@ -17,6 +18,10 @@ const defaultRoutes = [
   {
     path: '/transaction',
     route: transactionRoute,
+  },
+  {
+    path: '/bookshelves',
+    route: bookshelvesRoute,
   },
 ];
 
