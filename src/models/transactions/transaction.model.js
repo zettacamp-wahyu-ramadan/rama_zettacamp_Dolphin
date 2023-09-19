@@ -89,4 +89,6 @@ const transactionSchema = mongoose.Schema(
   }
 );
 
+transactionSchema.set('autoIndex', false);
+
 module.exports = mongoose.model('Transaction', transactionSchema);
