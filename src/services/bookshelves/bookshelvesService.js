@@ -33,7 +33,7 @@ const findByIdBookshelvesService = async (id, options) => {
   }
 };
 
-const findByBookIdBookshelvesService = async (query, options) => {
+const findOneByQueryBookshelvesService = async (query, options) => {
   try {
     const bookshelves = await Bookshelves.findOne(query, options).populate('books.book_id');
 
@@ -92,7 +92,7 @@ module.exports = {
   createBookshelvesService,
   findAllBookshelvesService,
   findByIdBookshelvesService,
-  findByBookIdBookshelvesService,
+  findOneByQueryBookshelvesService,
   updateOneBookshelvesByQueryService,
   updateManyBookshelvesByQueryService,
   deleteOneBookshelvesByQueryService,
