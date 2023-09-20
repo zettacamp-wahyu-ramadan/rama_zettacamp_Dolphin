@@ -44,6 +44,17 @@ const findOneBookService = async (query) => {
   }
 };
 
+const distinctBookService = async (data, query) => {
+  try {
+    const books = await Book.distinct(data, query);
+
+    return books;
+  } catch (error) {
+    console.error(`Error catch service: ${error}`);
+    throw new Error(error);
+  }
+};
+
 const updateOneBookByQueryService = async (query, data) => {
   try {
     const book = await Book.updateOne(query, { $set: data });
@@ -93,6 +104,7 @@ module.exports = {
   findByIdBookService,
   findAllBookService,
   findOneBookService,
+  distinctBookService,
   updateOneBookByQueryService,
   updateManyBookByQueryService,
   deleteOneBookByQueryService,

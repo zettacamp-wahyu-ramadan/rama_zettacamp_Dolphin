@@ -6,6 +6,7 @@ const {
   findByIdBookService,
   updateOneBookByQueryService,
   deleteOneBookByQueryService,
+  distinctBookService,
 } = require('../../services/books/bookService');
 
 const createBookController = async (req, res) => {
@@ -55,6 +56,21 @@ const findByIdBookController = async (req, res) => {
       );
 
     res.sendWrapped(`Book with ID ${id}`, httpStatus.OK, book);
+  } catch (error) {
+    console.error(`Error catch controller: ${error}`);
+    throw new Error(error);
+  }
+};
+
+const distinctBookController = async (req, res) => {
+  try {
+    const books = await distinctBookService('genre');
+
+    const result = {
+      genres: books,
+    };
+
+    res.sendWrapped('The list of genre book', httpStatus.OK, result);
   } catch (error) {
     console.error(`Error catch controller: ${error}`);
     throw new Error(error);
@@ -132,6 +148,7 @@ module.exports = {
   createBookController,
   findAllBookController,
   findByIdBookController,
+  distinctBookController,
   updateByIdBookController,
   deleteByIdBookController,
 };
