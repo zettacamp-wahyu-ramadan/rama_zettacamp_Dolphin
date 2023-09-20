@@ -8,7 +8,7 @@ const {
   updateManyBookshelvesByQueryService,
   deleteOneBookshelvesByQueryService,
   deleteManyBookshelvesByQueryService,
-  findByBookIdBookshelvesService,
+  findOneByQueryBookshelvesService,
 } = require('../../services/bookshelves/bookshelvesService');
 const { findByIdBookService } = require('../../services/books/bookService');
 
@@ -22,15 +22,15 @@ const createBookshelvesController = async (req, res) => {
     if (requestBody.books && requestBody.books.length) {
       const checkingBookId = requestBody.books.map(async (item) => {
         const validBookId = await findByIdBookService(item.bookId);
-  
+
         if (!validBookId) return false;
-  
+
         books.push({ book_id: item.bookId });
         return true;
       });
-  
+
       const resultsBookId = await Promise.all(checkingBookId);
-  
+
       if (resultsBookId.includes(false))
         return res.sendWrapped(`Invalid book ID`, httpStatus.BAD_REQUEST);
     }
@@ -113,7 +113,7 @@ const findByBookIdBookshelvesController = async (req, res) => {
     if (!mongoose.Types.ObjectId.isValid(book))
       return res.sendWrapped(`Invalid ID ${book}`, httpStatus.BAD_REQUEST);
 
-    const bookshelves = await findByBookIdBookshelvesService({
+    const bookshelves = await findOneByQueryBookshelvesService({
       books: { $elemMatch: { book_id: book } },
     });
 
@@ -197,12 +197,108 @@ const updateOneByIdBookshelvesController = async (req, res) => {
 
 const updateOneByBookIdBookshelvesController = async (req, res) => {
   try {
-    const { booksholvesId, bookId } = req.params;
+    const { bookshelvesId, bookId } = req.params;
+    let requestBody = req.body;
+
+    if (!mongoose.Types.ObjectId.isValid(bookshelvesId))
+      return res.sendWrapped(
+        `Invalid bookshelves ID ${bookshelvesId}`,
+        httpStatus.BAD_REQUEST
+      );
+
+    if (!mongoose.Types.ObjectId.isValid(bookId))
+      return res.sendWrapped(
+        `Invalid params book ID ${bookId}`,
+        httpStatus.BAD_REQUEST
+      );
+
+    if (requestBody.title) {
+      requestBody.title = requestBody.title.toUpperCase();
+    }
+
+    if (requestBody.bookId) {
+      if (!mongoose.Types.ObjectId.isValid(requestBody.bookId))
+        return res.sendWrapped(
+          `Invalid request book ID ${bookId}`,
+          httpStatus.BAD_REQUEST
+        );
+
+      const book = await findByIdBookService(bookId);
+
+      if (!book)
+        return res.sendWrapped(
+          `Request book with ID ${requestBody.bookId} not found`,
+          httpStatus.NOT_FOUND
+        );
+      
+      requestBody.book_id = requestBody.bookId;
+      delete requestBody.bookId;
+    }
+
+    const bookshelves = await findOneByQueryBookshelvesService({
+      $and: [
+        {
+          _id: bookshelvesId,
+        },
+        {
+          books: { $elemMatch: { book_id: bookId } },
+        },
+      ],
+    });
+
+    if (!bookshelves)
+      return res.sendWrapped(
+        `Bookshelves with ID $${bookshelvesId} and book with ID ${bookId} not found`,
+        httpStatus.NOT_FOUND
+      );
+
+    let dataRequest = {};
+    let dataOptions = {};
+
+    if (requestBody.title && requestBody.book_id) {
+      dataRequest = {
+        title: requestBody.title,
+        "books.$[book].book_id": requestBody.book_id
+      };
+
+      dataOptions = {
+        arrayFilters: [ { "book.book_id": bookId } ]
+      }
+    } else if (requestBody.title && !requestBody.book_id) {
+      dataRequest = {
+        title: requestBody.title
+      }
+    } else if (!requestBody.title && requestBody.book_id) {
+      dataRequest = {
+        "books.$[book].book_id": requestBody.book_id
+      }
+
+      dataOptions = {
+        arrayFilters: [ { "book.book_id": bookId } ]
+      }
+    } else {
+      return res.sendWrapped('Request cannot be empty', httpStatus.BAD_REQUEST);
+    }
+
+    const update = await updateOneBookshelvesByQueryService(
+      {
+        $and: [
+          {
+            _id: bookshelvesId,
+          },
+          {
+            books: { $elemMatch: { book_id: bookId } },
+          },
+        ],
+      },
+      dataRequest,
+      dataOptions,
+    );
 
     res.sendWrapped(
-      `Update bookshelves with ID ${booksholvesId} and book with ID ${bookId} successfully`,
+      `Update bookshelves with ID ${bookshelvesId} and book with ID ${bookId} successfully`,
       httpStatus.OK,
-      { booksholvesId, bookId }
+      update
     );
   } catch (error) {
     console.error(`Error catch controller: ${error}`);
