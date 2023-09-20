@@ -28,6 +28,11 @@ const bookSchema = mongoose.Schema({
     default: 0,
     required: false,
   },
+  genre: {
+    type: String,
+    default: null,
+    required: false,
+  },
   is_ready: {
     type: Boolean,
     default: true,
