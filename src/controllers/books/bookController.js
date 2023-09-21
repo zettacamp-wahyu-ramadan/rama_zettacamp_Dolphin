@@ -7,6 +7,7 @@ const {
   updateOneBookByQueryService,
   deleteOneBookByQueryService,
   distinctBookService,
+  aggregationBookService,
 } = require('../../services/books/bookService');
 
 const createBookController = async (req, res) => {
@@ -71,6 +72,26 @@ const distinctBookController = async (req, res) => {
     };
 
     res.sendWrapped('The list of genre book', httpStatus.OK, result);
+  } catch (error) {
+    console.error(`Error catch controller: ${error}`);
+    throw new Error(error);
+  }
+};
+
+const aggregateBookController = async (req, res) => {
+  try {
+    const pipeline = [
+      {
+        $project: {
+          title: 1,
+          price: 1,
+          stock: 1,
+        },
+      },
+    ];
+    const book = await aggregationBookService(pipeline);
+
+    res.sendWrapped('Book using aggregate', httpStatus.OK, book);
   } catch (error) {
     console.error(`Error catch controller: ${error}`);
     throw new Error(error);
@@ -149,6 +170,7 @@ module.exports = {
   findAllBookController,
   findByIdBookController,
   distinctBookController,
+  aggregateBookController,
   updateByIdBookController,
   deleteByIdBookController,
 };
