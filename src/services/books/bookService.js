@@ -55,6 +55,17 @@ const distinctBookService = async (data, query) => {
   }
 };
 
+const aggregationBookService = async (pipeline, options) => {
+  try {
+    const book = await Book.aggregate(pipeline, options);
+
+    return book;
+  } catch (error) {
+    console.error(`Error catch service: ${error}`);
+    throw new Error(error);
+  }
+};
+
 const updateOneBookByQueryService = async (query, data) => {
   try {
     const book = await Book.updateOne(query, { $set: data });
@@ -105,6 +116,7 @@ module.exports = {
   findAllBookService,
   findOneBookService,
   distinctBookService,
+  aggregationBookService,
   updateOneBookByQueryService,
   updateManyBookByQueryService,
   deleteOneBookByQueryService,
