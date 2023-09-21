@@ -44,6 +44,17 @@ const findOneByQueryBookshelvesService = async (query, options) => {
   }
 };
 
+const aggregateUnwindBookshelvesService = async (pipeline, options) => {
+  try {
+    const bookshelves = await Bookshelves.aggregate(pipeline, options);
+
+    return bookshelves;
+  } catch (error) {
+    console.error(`Error catch service: ${error}`);
+    throw new Error(error);
+  }
+};
+
 const updateOneBookshelvesByQueryService = async (query, data, options) => {
   try {
     const bookshelves = await Bookshelves.updateOne(query, { $set: data }, options);
@@ -93,6 +104,7 @@ module.exports = {
   findAllBookshelvesService,
   findByIdBookshelvesService,
   findOneByQueryBookshelvesService,
+  aggregateUnwindBookshelvesService,
   updateOneBookshelvesByQueryService,
   updateManyBookshelvesByQueryService,
   deleteOneBookshelvesByQueryService,
