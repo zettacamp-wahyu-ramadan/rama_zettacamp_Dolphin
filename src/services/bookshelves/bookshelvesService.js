@@ -46,7 +46,7 @@ const findOneByQueryBookshelvesService = async (query, options) => {
 
 const aggregateUnwindBookshelvesService = async (pipeline, options) => {
   try {
-    const bookshelves = await Bookshelves.aggregate(pipeline, options);
+    const bookshelves = await Bookshelves.aggregate(pipeline, options).populate('books.book_id');
 
     return bookshelves;
   } catch (error) {
