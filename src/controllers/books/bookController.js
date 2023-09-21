@@ -78,7 +78,7 @@ const distinctBookController = async (req, res) => {
   }
 };
 
-const aggregateBookController = async (req, res) => {
+const aggregateProjectBookController = async (req, res) => {
   try {
     const pipeline = [
       {
@@ -86,9 +86,43 @@ const aggregateBookController = async (req, res) => {
           title: 1,
           price: 1,
           stock: 1,
+          created_at: 1,
+          updated_at: 1,
         },
       },
     ];
+
+    const book = await aggregationBookService(pipeline);
+
+    res.sendWrapped('Book using aggregate', httpStatus.OK, book);
+  } catch (error) {
+    console.error(`Error catch controller: ${error}`);
+    throw new Error(error);
+  }
+};
+
+const aggregateAddFieldsBookController = async (req, res) => {
+  try {
+    const pipeline = [
+      {
+        $addFields: {
+          totalTax: {
+            $sum: [
+              '$price',
+              {
+                $multiply: [
+                  '$price',
+                  {
+                    $divide: ['$tax', 100],
+                  },
+                ],
+              },
+            ],
+          },
+        },
+      },
+    ];
+
     const book = await aggregationBookService(pipeline);
 
     res.sendWrapped('Book using aggregate', httpStatus.OK, book);
@@ -170,7 +204,8 @@ module.exports = {
   findAllBookController,
   findByIdBookController,
   distinctBookController,
-  aggregateBookController,
+  aggregateProjectBookController,
+  aggregateAddFieldsBookController,
   updateByIdBookController,
   deleteByIdBookController,
 };
