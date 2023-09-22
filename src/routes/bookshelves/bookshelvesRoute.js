@@ -8,6 +8,7 @@ const {
   deleteByIdBookshelvesController,
   updateOneByBookIdBookshelvesController,
   aggregateBookshelvesController,
+  aggregateBookLookupController,
 } = require('../../controllers/bookshelves/bookshelvesController');
 
 const router = Router();
@@ -15,6 +16,7 @@ const router = Router();
 router.post('/', createBookshelvesController);
 router.get('/', findAllBookshelvesController);
 router.get('/aggregate', aggregateBookshelvesController);
+router.get('/aggregate/lookup', aggregateBookLookupController);
 router.get('/:id', findByIdBookshelvesController);
 router.get('/book/:book', findByBookIdBookshelvesController);
 router.patch('/:id', updateOneByIdBookshelvesController);

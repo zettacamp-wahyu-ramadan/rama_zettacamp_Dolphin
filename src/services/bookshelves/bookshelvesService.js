@@ -44,7 +44,7 @@ const findOneByQueryBookshelvesService = async (query, options) => {
   }
 };
 
-const aggregateUnwindBookshelvesService = async (pipeline, options) => {
+const aggregateBookshelvesService = async (pipeline, options) => {
   try {
     const bookshelves = await Bookshelves.aggregate(pipeline, options);
 
@@ -104,7 +104,7 @@ module.exports = {
   findAllBookshelvesService,
   findByIdBookshelvesService,
   findOneByQueryBookshelvesService,
-  aggregateUnwindBookshelvesService,
+  aggregateBookshelvesService,
   updateOneBookshelvesByQueryService,
   updateManyBookshelvesByQueryService,
   deleteOneBookshelvesByQueryService,

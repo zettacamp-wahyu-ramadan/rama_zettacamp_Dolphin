@@ -9,7 +9,7 @@ const {
   deleteOneBookshelvesByQueryService,
   deleteManyBookshelvesByQueryService,
   findOneByQueryBookshelvesService,
-  aggregateUnwindBookshelvesService,
+  aggregateBookshelvesService,
 } = require('../../services/bookshelves/bookshelvesService');
 const { findByIdBookService } = require('../../services/books/bookService');
 
@@ -141,6 +141,38 @@ const aggregateBookshelvesController = async (req, res) => {
       {
         $unwind: '$books', // Split array of object in bookshelves collection
       },
+      // {
+      //   $lookup: {
+      //     from: 'books', // Join with books
+      //     localField: 'books.book_id', // Field from bookshelves
+      //     foreignField: '_id', // Field from books
+      //     as: 'book_lookup', // Initialization
+      //   },
+      // },
+      {
+        $project: {
+          _id: 1,
+          book: '$books.book_id'
+        }
+      }
+    ];
+
+    const bookshelves = await aggregateBookshelvesService(pipeline);
+
+    res.sendWrapped(
+      'Bookshelves using aggregate unwind',
+      httpStatus.OK,
+      bookshelves
+    );
+  } catch (error) {
+    console.error(`Error catch controller: ${error}`);
+    throw new Error(error);
+  }
+};
+
+const aggregateBookLookupController = async (req, res) => {
+  try {
+    const pipeline = [
       {
         $lookup: {
           from: 'books', // Join with books
@@ -152,18 +184,17 @@ const aggregateBookshelvesController = async (req, res) => {
       {
         $project: {
           _id: 1,
-          book: '$book_lookup'
+          title: 1,
+          books: '$book_lookup',
+          created_at: 1,
+          updated_at: 1,
         }
-      }
+      },
     ];
 
-    const bookshelves = await aggregateUnwindBookshelvesService(pipeline);
+    const bookshelveses = await aggregateBookshelvesService(pipeline);
 
-    res.sendWrapped(
-      'Bookshelves using aggregate unwind',
-      httpStatus.OK,
-      bookshelves
-    );
+    res.sendWrapped('Bookshelves with operation lookup', httpStatus.OK, bookshelveses);
   } catch (error) {
     console.error(`Error catch controller: ${error}`);
     throw new Error(error);
@@ -381,6 +412,7 @@ module.exports = {
   findByIdBookshelvesController,
   findByBookIdBookshelvesController,
   aggregateBookshelvesController,
+  aggregateBookLookupController,
   updateOneByIdBookshelvesController,
   updateOneByBookIdBookshelvesController,
   deleteByIdBookshelvesController,
