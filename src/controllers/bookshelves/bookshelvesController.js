@@ -141,18 +141,18 @@ const aggregateBookshelvesController = async (req, res) => {
       {
         $unwind: '$books', // Split array of object in bookshelves collection
       },
-      {
-        $lookup: {
-          from: 'books', // Join with books
-          localField: 'books.book_id', // Field from bookshelves
-          foreignField: '_id', // Field from books
-          as: 'book_lookup', // Initialization
-        },
-      },
+      // {
+      //   $lookup: {
+      //     from: 'books', // Join with books
+      //     localField: 'books.book_id', // Field from bookshelves
+      //     foreignField: '_id', // Field from books
+      //     as: 'book_lookup', // Initialization
+      //   },
+      // },
       {
         $project: {
           _id: 1,
-          book: '$book_lookup'
+          book: '$books.book_id'
         }
       }
     ];
