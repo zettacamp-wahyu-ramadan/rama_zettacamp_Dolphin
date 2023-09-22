@@ -82,7 +82,8 @@ const aggregateBookController = async (req, res) => {
   try {
     const pipeline = [
       {
-        $addFields: { // Calculate tax
+        $addFields: {
+          // Calculate tax
           calculateTax: {
             $multiply: [
               '$price',
@@ -91,36 +92,40 @@ const aggregateBookController = async (req, res) => {
               },
             ],
           },
-        }
+        },
       },
       {
-        $addFields: { // Total tax
+        $addFields: {
+          // Total tax
           totalTax: {
-            $sum: ['$price','$calculateTax'],
+            $sum: ['$price', '$calculateTax'],
           },
         },
       },
       {
-        $addFields: { // Calculate discount
+        $addFields: {
+          // Calculate discount
           calculateDiscount: {
             $multiply: [
               '$totalTax',
               {
-                $divide: ['$discount', 100]
-              }
-            ]
-          }
-        }
+                $divide: ['$discount', 100],
+              },
+            ],
+          },
+        },
       },
       {
-        $addFields: { // Total price
+        $addFields: {
+          // Total price
           totalPrice: {
             $subtract: ['$totalTax', '$calculateDiscount'],
-          }
-        }
+          },
+        },
       },
       {
-        $project: { // Set return to response
+        $project: {
+          // Set return to response
           _id: 1,
           titel: 1,
           price: 1,
@@ -132,13 +137,61 @@ const aggregateBookController = async (req, res) => {
           totalPrice: 1,
           created_at: 1,
           updated_at: 1,
-        }
-      }
+        },
+      },
     ];
 
     const book = await aggregationBookService(pipeline);
 
     res.sendWrapped('Book using aggregate', httpStatus.OK, book);
+  } catch (error) {
+    console.error(`Error catch controller: ${error}`);
+    throw new Error(error);
+  }
+};
+
+const aggregateBookMatchSortConcatController = async (req, res) => {
+  try {
+    let { match } = req.body;
+
+    if (match) {
+      match = match.toUpperCase();
+    }
+
+    const pipeline = [
+      {
+        $match: {
+          author: match,
+        },
+      },
+      {
+        $sort: {
+          updated_at: -1,
+        },
+      },
+      {
+        $project: {
+          _id: 1,
+          title: 1,
+          price: 1,
+          stock: 1,
+          author: 1,
+          simpleDisplay: {
+            $concat: ['$title', ' - ', '$author'],
+          },
+          created_at: 1,
+          updated_at: 1,
+        },
+      },
+    ];
+
+    const books = await aggregationBookService(pipeline);
+
+    res.sendWrapped(
+      'Book with operation match, sort, concat',
+      httpStatus.OK,
+      books
+    );
   } catch (error) {
     console.error(`Error catch controller: ${error}`);
     throw new Error(error);
@@ -218,6 +271,7 @@ module.exports = {
   findByIdBookController,
   distinctBookController,
   aggregateBookController,
+  aggregateBookMatchSortConcatController,
   updateByIdBookController,
   deleteByIdBookController,
 };
