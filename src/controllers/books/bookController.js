@@ -78,49 +78,62 @@ const distinctBookController = async (req, res) => {
   }
 };
 
-const aggregateProjectBookController = async (req, res) => {
+const aggregateBookController = async (req, res) => {
   try {
     const pipeline = [
       {
-        $project: {
-          title: 1,
-          price: 1,
-          stock: 1,
-          created_at: 1,
-          updated_at: 1,
-        },
-      },
-    ];
-
-    const book = await aggregationBookService(pipeline);
-
-    res.sendWrapped('Book using aggregate', httpStatus.OK, book);
-  } catch (error) {
-    console.error(`Error catch controller: ${error}`);
-    throw new Error(error);
-  }
-};
-
-const aggregateAddFieldsBookController = async (req, res) => {
-  try {
-    const pipeline = [
-      {
-        $addFields: {
-          totalTax: {
-            $sum: [
+        $addFields: { // Calculate tax
+          calculateTax: {
+            $multiply: [
               '$price',
               {
-                $multiply: [
-                  '$price',
-                  {
-                    $divide: ['$tax', 100],
-                  },
-                ],
+                $divide: ['$tax', 100],
               },
             ],
           },
+        }
+      },
+      {
+        $addFields: { // Total tax
+          totalTax: {
+            $sum: ['$price','$calculateTax'],
+          },
         },
       },
+      {
+        $addFields: { // Calculate discount
+          calculateDiscount: {
+            $multiply: [
+              '$totalTax',
+              {
+                $divide: ['$discount', 100]
+              }
+            ]
+          }
+        }
+      },
+      {
+        $addFields: { // Total price
+          totalPrice: {
+            $subtract: ['$totalTax', '$calculateDiscount'],
+          }
+        }
+      },
+      {
+        $project: { // Set return to response
+          _id: 1,
+          titel: 1,
+          price: 1,
+          tax: 1,
+          calculateTax: 1,
+          totalTax: 1,
+          discount: 1,
+          calculateDiscount: 1,
+          totalPrice: 1,
+          created_at: 1,
+          updated_at: 1,
+        }
+      }
     ];
 
     const book = await aggregationBookService(pipeline);
@@ -204,8 +217,7 @@ module.exports = {
   findAllBookController,
   findByIdBookController,
   distinctBookController,
-  aggregateProjectBookController,
-  aggregateAddFieldsBookController,
+  aggregateBookController,
   updateByIdBookController,
   deleteByIdBookController,
 };

@@ -9,6 +9,7 @@ const {
   deleteOneBookshelvesByQueryService,
   deleteManyBookshelvesByQueryService,
   findOneByQueryBookshelvesService,
+  aggregateUnwindBookshelvesService,
 } = require('../../services/bookshelves/bookshelvesService');
 const { findByIdBookService } = require('../../services/books/bookService');
 
@@ -134,6 +135,41 @@ const findByBookIdBookshelvesController = async (req, res) => {
   }
 };
 
+const aggregateBookshelvesController = async (req, res) => {
+  try {
+    const pipeline = [
+      {
+        $unwind: '$books', // Split array of object in bookshelves collection
+      },
+      {
+        $lookup: {
+          from: 'books', // Join with books
+          localField: 'books.book_id', // Field from bookshelves
+          foreignField: '_id', // Field from books
+          as: 'book_lookup', // Initialization
+        },
+      },
+      {
+        $project: {
+          _id: 1,
+          book: '$book_lookup'
+        }
+      }
+    ];
+
+    const bookshelves = await aggregateUnwindBookshelvesService(pipeline);
+
+    res.sendWrapped(
+      'Bookshelves using aggregate unwind',
+      httpStatus.OK,
+      bookshelves
+    );
+  } catch (error) {
+    console.error(`Error catch controller: ${error}`);
+    throw new Error(error);
+  }
+};
+
 const updateOneByIdBookshelvesController = async (req, res) => {
   try {
     const { id } = req.params;
@@ -230,7 +266,7 @@ const updateOneByBookIdBookshelvesController = async (req, res) => {
           `Request book with ID ${requestBody.bookId} not found`,
           httpStatus.NOT_FOUND
         );
-      
+
       requestBody.book_id = requestBody.bookId;
       delete requestBody.bookId;
     }
@@ -258,24 +294,24 @@ const updateOneByBookIdBookshelvesController = async (req, res) => {
     if (requestBody.title && requestBody.book_id) {
       dataRequest = {
         title: requestBody.title,
-        "books.$[book].book_id": requestBody.book_id
+        'books.$[book].book_id': requestBody.book_id,
       };
 
       dataOptions = {
-        arrayFilters: [ { "book.book_id": bookId } ]
-      }
+        arrayFilters: [{ 'book.book_id': bookId }],
+      };
     } else if (requestBody.title && !requestBody.book_id) {
       dataRequest = {
-        title: requestBody.title
-      }
+        title: requestBody.title,
+      };
     } else if (!requestBody.title && requestBody.book_id) {
       dataRequest = {
-        "books.$[book].book_id": requestBody.book_id
-      }
+        'books.$[book].book_id': requestBody.book_id,
+      };
 
       dataOptions = {
-        arrayFilters: [ { "book.book_id": bookId } ]
-      }
+        arrayFilters: [{ 'book.book_id': bookId }],
+      };
     } else {
       return res.sendWrapped('Request cannot be empty', httpStatus.BAD_REQUEST);
     }
@@ -292,7 +328,7 @@ const updateOneByBookIdBookshelvesController = async (req, res) => {
         ],
       },
       dataRequest,
-      dataOptions,
+      dataOptions
     );
 
     res.sendWrapped(
@@ -344,6 +380,7 @@ module.exports = {
   findAllBookshelvesController,
   findByIdBookshelvesController,
   findByBookIdBookshelvesController,
+  aggregateBookshelvesController,
   updateOneByIdBookshelvesController,
   updateOneByBookIdBookshelvesController,
   deleteByIdBookshelvesController,
