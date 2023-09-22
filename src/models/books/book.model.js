@@ -33,6 +33,11 @@ const bookSchema = mongoose.Schema({
     default: null,
     required: false,
   },
+  author: {
+    type: String,
+    default: null,
+    required: false,
+  },
   is_ready: {
     type: Boolean,
     default: true,
