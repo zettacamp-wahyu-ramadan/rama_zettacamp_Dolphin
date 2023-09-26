@@ -73,6 +73,14 @@ const aggregateFindAllSongController = async (req, res) => {
         $facet: {
           songs: [
             {
+              $lookup: {
+                from: 'playlists',
+                localField: '_id',
+                foreignField: 'songs.song_id',
+                as: 'playlists'
+              }
+            },
+            {
               $sort: {
                 updated_at: -1,
               },
@@ -221,6 +229,14 @@ const aggregateFindAllSongController = async (req, res) => {
         {
           $facet: {
             songs: [
+              {
+                $lookup: {
+                  from: 'playlists',
+                  localField: '_id',
+                  foreignField: 'songs.song_id',
+                  as: 'playlists'
+                }
+              },
               {
                 $match: {
                   genre,
