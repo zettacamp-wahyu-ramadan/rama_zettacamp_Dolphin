@@ -87,7 +87,7 @@ const aggregateFindAllSongController = async (req, res) => {
           totalPage: [
             {
               $group: {
-                _id: '$genre',
+                _id: null,
                 totalData: { $sum: 1 },
               },
             },
