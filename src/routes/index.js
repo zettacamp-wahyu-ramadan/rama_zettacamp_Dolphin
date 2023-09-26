@@ -3,6 +3,8 @@ const bookRoute = require('./books/bookRoute');
 const userRoute = require('./users/userRoute');
 const transactionRoute = require('./transactions/transactionRoute');
 const bookshelvesRoute = require('./bookshelves/bookshelvesRoute');
+const songRoute = require('./songs/songRoute');
+const playlistRoute = require('./playlists/playlistRoute');
 
 const router = Router();
 
@@ -22,6 +24,14 @@ const defaultRoutes = [
   {
     path: '/bookshelves',
     route: bookshelvesRoute,
+  },
+  {
+    path: '/song',
+    route: songRoute,
+  },
+  {
+    path: '/playlist',
+    route: playlistRoute,
   },
 ];
 
